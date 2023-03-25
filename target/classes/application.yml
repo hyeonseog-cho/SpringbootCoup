@@ -1,0 +1,25 @@
+spring:
+  security:
+    user:
+      name: user
+      password: testpw
+  # mvc:
+  #   view:
+  #     prefix: /WEB-INF/view/
+  #     suffix: .jsp
+  
+  devtools:
+    restart:
+      # 로깅시 재시작 방지
+      exclude: logs/**
+  
+  output:
+    ansi:
+      enabled: always
+
+server:
+  port: 5000
+  # servlet:
+  #   context-path: /index
+
+
