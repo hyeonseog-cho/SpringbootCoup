@@ -385,7 +385,7 @@ public class WebGame {
     private void sacrificeCard(Player player) throws InterruptedException {
         Card card = getCardToSacrifice(player);
         log("%s가 %s를 버림", player, card);
-        player.removeCard(card);
+        player.setLostCard(card);
     }
 
     /**
@@ -756,6 +756,7 @@ public class WebGame {
      */
     private static class Update {
         public Card[] localPlayerCards;
+        public Card[] localPlayerlostCards;
         public PlayerState[] players;
         public String userName;
         public int coins;
@@ -764,6 +765,7 @@ public class WebGame {
             this.userName = localPlayer.getName();
             this.coins = localPlayer.coins;
             this.localPlayerCards = localPlayer.getCards().toArray(new Card[0]);
+            this.localPlayerlostCards = localPlayer.getLostCard().toArray(new Card[0]);
             this.players = Arrays.stream(players)
                     .filter(Objects::nonNull)
                     .map(PlayerState::new)
@@ -775,6 +777,7 @@ public class WebGame {
             String message = "";
             message += "당신의 이름: " + userName + " 코인 수: " + coins + "\n";
             message += "당신의 카드 : " + Arrays.toString(localPlayerCards) + "\n";
+            message += "당신이 잃은 카드: " + Arrays.toString(localPlayerlostCards) + "\n";
 
             for (int i = 0; i < players.length; i++) {
                 message += "Player " + i + " : " + players[i].name;

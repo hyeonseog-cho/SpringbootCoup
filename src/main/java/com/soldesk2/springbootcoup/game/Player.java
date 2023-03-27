@@ -7,6 +7,7 @@ public class Player {
     public int coins;
     private final String name;
     private ArrayList<Card> cards;
+    private ArrayList<Card> lostcards;
 
     public Player(String name, Card card1, Card card2) {
         this.name = name;
@@ -14,6 +15,7 @@ public class Player {
         cards = new ArrayList<>(4);
         cards.add(card1);
         cards.add(card2);
+        lostcards = new ArrayList<>(2);
     }
     
     public void addCard(Card card) {
@@ -52,6 +54,19 @@ public class Player {
 
     public Card getCard(Card card){
         return card;
+    }
+    
+    public void setLostCard(Card card){
+        if (cards.contains(card)) {
+            cards.remove(card);
+            lostcards.add(card);
+        } else {
+            throw new IllegalArgumentException("플레이어 " + this.name + "에게 카드 " + card + "가 없습니다.");
+        }
+    }
+
+    public List<Card> getLostCard(){
+        return this.lostcards;
     }
 
     @Override
