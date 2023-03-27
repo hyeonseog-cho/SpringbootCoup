@@ -777,7 +777,7 @@ public class WebGame {
             String message = "";
             message += "당신의 이름: " + userName + " 코인 수: " + coins + "\n";
             message += "당신의 카드 : " + Arrays.toString(localPlayerCards) + "\n";
-            message += "당신이 잃은 카드: " + Arrays.toString(localPlayerlostCards) + "\n";
+            message += "당신이 잃은 카드: " + Arrays.toString(localPlayerlostCards) + "\n"; 
 
             for (int i = 0; i < players.length; i++) {
                 message += "Player " + i + " : " + players[i].name;
