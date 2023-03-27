@@ -9,6 +9,6 @@ public class MainController {
     
     @GetMapping({"/","/index"})
     public String index() {
-        return "Java Spring boot BoardGame Coup";
+        return "2Team Java Spring boot BoardGame_Coup";
     }
 }
