@@ -56,6 +56,8 @@ public class BoardController {
 			board.setIndex(checkboard.getIndex());
 			board.setReadCount(checkboard.getReadCount());
 		}
+		System.out.println(board.getIndex());
+		System.out.println(board.getReadCount());
 		Board updateBoard = boardService.update_Board(board);
 
 		// 값이 없을시 
