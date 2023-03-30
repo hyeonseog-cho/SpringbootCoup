@@ -1,16 +1,12 @@
 package com.soldesk2.springbootcoup.controller;
 
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.soldesk2.springbootcoup.entity.Member;
-import com.soldesk2.springbootcoup.entity.Role;
 import com.soldesk2.springbootcoup.service.LoginService;
 
 @RestController
@@ -19,7 +15,7 @@ public class loginController {
     @Autowired
     LoginService loginService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public String login(@RequestBody Member message) {
 
         String id = message.getId();
@@ -43,7 +39,6 @@ public class loginController {
         member.setPassword(message.getPassword());
         member.setName(message.getName());
         member.setEmail(message.getEmail());
-        member.setRole(Role.MEMBER);
 
         Member add_user = loginService.add_user(member);
         if (add_user == null) {
