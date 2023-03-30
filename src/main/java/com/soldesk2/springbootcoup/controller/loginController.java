@@ -4,6 +4,7 @@ import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +18,7 @@ public class loginController {
     @Autowired
     LoginService loginService;
 
-    @MessageMapping("/login")
-    @SendToUser("/login")
+    @GetMapping("/login")
     public String login(@RequestBody Member message) {
 
         String id = message.getId();
@@ -34,8 +34,7 @@ public class loginController {
         }
     }
 
-    @MessageMapping("/signup")
-    @SendToUser("/signup")
+    @GetMapping("/signup")
     public String signup(@RequestBody Member message){
         
         Member member = new Member();
