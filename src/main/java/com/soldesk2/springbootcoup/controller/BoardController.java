@@ -48,8 +48,16 @@ public class BoardController {
 	
 	@PutMapping("/board")
 	public ResponseEntity<Board> Update_Board(@RequestBody Board board) { // PUT / 게시글 수정
+		Board checkboard = boardService.check_Board(board.getIndex());
+		if (checkboard == null) {
+			return ResponseEntity.noContent().build();
+		}
+		else {
+			board.setIndex(checkboard.getIndex());
+			board.setReadCount(checkboard.getReadCount());
+		}
 		Board updateBoard = boardService.update_Board(board);
-		
+
 		// 값이 없을시 
 		if (updateBoard == null) {
 			return ResponseEntity.noContent().build();
@@ -66,5 +74,10 @@ public class BoardController {
 		}
 		
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/aa")
+	public String aa(){
+		return "aa";
 	}
 }

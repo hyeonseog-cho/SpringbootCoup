@@ -37,6 +37,16 @@ public class BoardSerivceimpl implements BoardService{
 		Board add_board = boardRepository.save(board);
 		return add_board;
 	}
+
+	@Override
+	public Board check_Board(Long idx) {
+		Optional<Board> check_board = boardRepository.findById(idx);
+		if (check_board.isPresent()) {
+			return check_board.get();
+		} else {
+			return null;
+		}
+	}
 	
 	@Override
 	public Board update_Board(Board board) {
