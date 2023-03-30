@@ -138,7 +138,7 @@ public class WebGameController {
             lobbyList.put(lobbyName, newLobby);
 
             logger.info("로비 {} 생성. 현재 로비 리스트: {}", lobbyName, lobbyList);
-            return "로비명 " + lobbyName + " 로비를 생성했다. ";
+            return "로비명 " + lobbyName + " 로비를 생성했다.\n"+ newLobby.toString();
         }
 
         Lobby lobby = lobbyList.get(lobbyName);
@@ -151,7 +151,7 @@ public class WebGameController {
         }
 
         logger.info("유저 {}가 로비 {}에 접속함", name, lobbyName);
-        return "로비 이름 " + lobbyName + "에 접속 성공. 현재 로비 인원: " + lobby.getPlayerNames();
+        return "로비 이름 " + lobbyName + "에 접속 성공. 현재 로비 인원: " + lobby.getPlayerNames() +"\n"+ lobby.toString();
     }
 
     @MessageMapping("/chat")

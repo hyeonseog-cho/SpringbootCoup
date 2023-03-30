@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Logger;
 import lombok.Getter;
@@ -56,7 +57,7 @@ public class Lobby {
 
         playerNames.add(playerName);
         updateAllPlayers("현재 접속한 로비 " + this.name + "에 " + playerName + "가 접속했다. \n" +
-                        "현재 접속한 플레이어: " + this.playerNames);
+                        "현재 접속한 플레이어: " + this.playerNames +"\n"+ toString());
 
         if (this.playerNames.size() >= MAX_PLAYER) {
             this.state = State.FULL;
@@ -113,9 +114,9 @@ public class Lobby {
     @Override
     public String toString() {
         return "로비 이름 : " + this.name + "\n"
-               +  "현재 상태 : " + this.state + "\n"
-               + "현재 플레이어: " + this.playerNames + "\n";
-        }
+                +  "현재 상태 : " + this.state + "\n"
+                + "현재 플레이어: " + this.playerNames + "\n";
+    }
 
     @Override
     public int hashCode() {
