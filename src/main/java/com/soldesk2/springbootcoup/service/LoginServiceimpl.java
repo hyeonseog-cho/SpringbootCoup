@@ -27,10 +27,13 @@ public class LoginServiceimpl implements LoginService{
     @Override
     public Boolean get_user(String id, String password) {
         Optional<Member> user = loginRepository.findById(id);
-        if(user == null || !user.get().getPassword().equals(password)){
+        if(user == null){
             return false;
+        } else if (!user.get().getPassword().equals(password)) {
+            return false;
+        } else{
+            return true;
         }
-        return true;
     }
 
 }
