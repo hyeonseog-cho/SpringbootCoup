@@ -17,11 +17,7 @@ public class loginController {
 
     @PostMapping("/login")
     public String login(@RequestBody Member message) {
-
-        String id = message.getId();
-        String password = message.getPassword();
-        String name = message.getName();
-
-        return loginService.get_user(id, password, name);
+        
+        return loginService.get_user(message);
     }
 }
