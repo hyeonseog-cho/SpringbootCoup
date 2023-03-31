@@ -20,12 +20,12 @@ public class loginController {
 
         String id = message.getId();
         String password = message.getPassword();
-        System.out.println(id + "/" + password);
+        System.out.println(id + "/"+ password);
 
 
         Boolean exist_user = loginService.get_user(id, password);
 
-        if(exist_user == false){
+        if(exist_user == false || exist_user == null){
             return "-1";
         } else{
             return "1";
