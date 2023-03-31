@@ -19,13 +19,13 @@ public class LoginServiceimpl implements LoginService{
         Optional<Member> finduser = loginRepository.findById(user.getId());
         loginRepository.save(user);
     
-        if(!finduser.isPresent() || finduser == null){
-            return "-1";    
-        } else{
-            if (finduser.get().getPassword().equals(user.getPassword())){
-                return "1";
+        if(!finduser.isPresent()) {
+            return "-1";  // 새로 생성한 id
+        } else {
+            if (finduser.get().getPassword().equals(user.getPassword())) {
+                return "1"; // 기존 id / db pw와 입력 pw가 같을 때
             }
-            return "-2";
+            return "-2"; // 기존 id / pw 다를 때
         }
     }
 
