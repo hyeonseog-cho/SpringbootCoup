@@ -17,10 +17,11 @@ public class LoginServiceimpl implements LoginService{
     @Override
     public String get_user(Member user) {
         Optional<Member> finduser = loginRepository.findById(user.getId());
-        loginRepository.save(user);
+        
         
     
         if(!finduser.isPresent()) {
+            loginRepository.save(user);
             return "-1";  // 새로 생성한 id
         } else {
             System.out.println(finduser.get().getPassword());
