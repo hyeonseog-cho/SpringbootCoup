@@ -20,6 +20,7 @@ public class loginController {
 
         String id = message.getId();
         String password = message.getPassword();
+        System.out.println(id + "/" + password);
 
 
         Boolean exist_user = loginService.get_user(id, password);
