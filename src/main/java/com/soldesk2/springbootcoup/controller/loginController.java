@@ -20,31 +20,8 @@ public class loginController {
 
         String id = message.getId();
         String password = message.getPassword();
+        String name = message.getName();
 
-        Boolean exist_user = loginService.get_user(id, password);
-
-        if(exist_user == false || exist_user == null){
-            return "-1";
-        } else{
-            return "1";
-        }
-    }
-
-    @PostMapping("/signup")
-    public String signup(@RequestBody Member message){
-        
-        Member member = new Member();
-        member.setId(message.getId());
-        member.setPassword(message.getPassword());
-        member.setName(message.getName());
-        member.setEmail(message.getEmail());
-
-        Member add_user = loginService.add_user(member);
-        if (add_user == null) {
-            return "-1";
-        } else {
-            return "1";
-        }
-
+        return loginService.get_user(id, password, name);
     }
 }

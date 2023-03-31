@@ -15,27 +15,16 @@ public class LoginServiceimpl implements LoginService{
     LoginRepository loginRepository;
 
     @Override
-    public Member add_user(Member user){
-        Optional<Member> member = loginRepository.findById(user.getId());
-        if(member.isPresent()){
-            return null;
-        }
-        Member new_user = loginRepository.save(user);
-        return new_user;
-    }
-
-    @Override
-    public Boolean get_user(String id, String password) {
+    public String get_user(String id, String password, String name) {
         Optional<Member> user = loginRepository.findById(id);
 
-        if(!user.isPresent() || user == null) {
-            return false;  
-        } 
-
-        if (user.get().getPassword().equals(password)){
-            return true;
+        if(!user.isPresent() || user == null){
+            return "-1";    
         } else{
-            return false;
+            if (user.get().getPassword().equals(password)){
+                return "1";
+            }
+            return "-2";
         }
     }
 
