@@ -22,7 +22,7 @@ public class LoginServiceimpl implements LoginService{
         if(!finduser.isPresent() || finduser == null){
             return "-1";    
         } else{
-            if (!finduser.get().getPassword().equals(user.getPassword())){
+            if (finduser.get().getPassword().equals(user.getPassword())){
                 return "1";
             }
             return "-2";
