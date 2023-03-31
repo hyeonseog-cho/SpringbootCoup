@@ -24,10 +24,10 @@ public class loginController {
 
         Boolean exist_user = loginService.get_user(id, password);
 
-        if(exist_user == true){
-            return id;
-        } else{
+        if(exist_user == false){
             return "-1";
+        } else{
+            return "1";
         }
     }
 
