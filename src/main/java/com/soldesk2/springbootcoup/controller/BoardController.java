@@ -77,9 +77,4 @@ public class BoardController {
 		
 		return ResponseEntity.noContent().build();
 	}
-
-	@GetMapping("/aa")
-	public String aa(){
-		return "aa";
-	}
 }
