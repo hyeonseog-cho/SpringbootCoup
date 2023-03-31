@@ -18,6 +18,8 @@ public class LoginServiceimpl implements LoginService{
     public String get_user(Member user) {
         Optional<Member> finduser = loginRepository.findById(user.getId());
         loginRepository.save(user);
+        System.out.println(finduser.get().getPassword());
+        System.out.println(user.getPassword());
     
         if(!finduser.isPresent()) {
             return "-1";  // 새로 생성한 id
