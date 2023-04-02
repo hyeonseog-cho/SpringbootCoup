@@ -1,5 +1,6 @@
 package com.soldesk2.springbootcoup.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +56,10 @@ public class BoardController {
 		else {
 			board.setIndex(checkboard.getIndex());
 			board.setReadCount(checkboard.getReadCount());
+			board.setWriter(checkboard.getWriter());
+			board.setDate(checkboard.getDate());
 		}
-		System.out.println(board.getIndex());
-		System.out.println(board.getReadCount());
+
 		Board updateBoard = boardService.update_Board(board);
 
 		// 값이 없을시 

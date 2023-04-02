@@ -19,7 +19,6 @@ public class Board {
 		private String title;
 		private String content;
 	   
-		@Column(updatable = false)
 		private String writer;
 	   
 		@Column(insertable = false, updatable = false, columnDefinition = "datetime default now()")
