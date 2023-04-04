@@ -16,8 +16,8 @@ public class loginController {
     LoginService loginService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Member message) {
-        
-        return loginService.get_user(message);
+    public String login(@RequestBody Member user) {
+        return loginService.get_user(user);
     }
+
 }

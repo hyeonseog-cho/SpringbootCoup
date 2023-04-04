@@ -16,9 +16,7 @@ public class LoginServiceimpl implements LoginService{
 
     @Override
     public String get_user(Member user) {
-        Optional<Member> finduser = loginRepository.findById(user.getId());
-        
-        
+        Optional<Member> finduser = loginRepository.findById(user.getId());        
     
         if(!finduser.isPresent()) {
             loginRepository.save(user);

@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.soldesk2.springbootcoup.entity.Board;
+import com.soldesk2.springbootcoup.entity.Comment;
 import com.soldesk2.springbootcoup.repository.BoardRepository;
+import com.soldesk2.springbootcoup.repository.CommentRepository;
 
 @Service
 public class BoardSerivceimpl implements BoardService{
 	
 	@Autowired
 	BoardRepository boardRepository;
+
+	@Autowired
+	CommentRepository commentRepository;
 	
 
 	@Override
@@ -66,6 +71,51 @@ public class BoardSerivceimpl implements BoardService{
 		boardRepository.deleteById(idx);
 		return true;
 		
+	}
+
+	@Override
+	public Board add_comment(Long idx, Comment comment) {
+		Optional<Board> board = boardRepository.findById(idx);
+		if(!board.isPresent()) {
+			return null;
+		}
+		Board add_comment_board = board.get();
+		comment.setBoard(add_comment_board);
+		add_comment_board.getComments().add(comment);
+
+		return add_comment_board;
+	}
+
+	@Override
+	public Board update_comment(Long idx, Comment comment) {
+		Optional<Board> board = boardRepository.findById(idx);
+		if(!board.isPresent()) {
+			return null;
+		}
+
+		Optional<Comment> findcomment = commentRepository.findById(comment.getId());
+		if(!findcomment.isPresent()) {		
+			return null;
+		}
+
+		commentRepository.save(comment);
+		return board.get();
+	}
+
+	@Override
+	public Boolean delete_comment(Long idx, Long id) {
+		Optional<Board> board = boardRepository.findById(idx);
+		if(!board.isPresent()) {
+			return false;
+		}
+
+		Optional<Comment> findcomment = commentRepository.findById(id);
+		if(!findcomment.isPresent()) {		
+			return false;
+		}
+
+		commentRepository.deleteById(id);
+		return true;
 	}
 
 }
