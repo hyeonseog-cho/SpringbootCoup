@@ -18,4 +18,8 @@ public class Comment {
 
     private String content;
     private String writer;
+
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "index")
+    private Board board;
 }
