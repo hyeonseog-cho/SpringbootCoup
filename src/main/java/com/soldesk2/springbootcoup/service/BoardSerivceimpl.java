@@ -79,11 +79,12 @@ public class BoardSerivceimpl implements BoardService{
 		if(!board.isPresent()) {
 			return null;
 		}
+		Board add_comment_board = board.get();
+		comment.setBoard(add_comment_board);
+		add_comment_board.getComments().add(comment);
+		boardRepository.save(add_comment_board);
 
-		board.get().addComment(comment);
-		boardRepository.save(board.get());
-
-		return board.get();
+		return add_comment_board;
 	}
 
 	@Override
