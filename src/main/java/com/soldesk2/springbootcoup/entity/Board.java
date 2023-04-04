@@ -31,7 +31,6 @@ public class Board {
 		@Column(insertable = false, columnDefinition = "int default 0")
 		private Long readCount;
 
-		@OneToMany(mappedBy = "board", cascade = CascadeType.ALL) // board와 연결, board의 변화가 모든 영향을 끼치도록 설정
 		private List<Comment> comments = new ArrayList<>();
 
 		public void addComment(Comment comment) {
