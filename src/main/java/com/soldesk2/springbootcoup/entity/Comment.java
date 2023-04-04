@@ -1,5 +1,8 @@
 package com.soldesk2.springbootcoup.entity;
 
+import java.util.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +21,9 @@ public class Comment {
 
     private String content;
     private String writer;
+
+    @Column(insertable = false, updatable = false, columnDefinition = "datetime default now()")
+	private Date date; //now()
 
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "index")
