@@ -17,6 +17,7 @@ public class Comment {
     private Long id;
 
     private String content;
+    private String writer;
 
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "index")
