@@ -28,4 +28,13 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "index")
     private Board board;
+
+    @Override
+    public String toString() {
+    return "Comment{" +
+            "id=" + id +
+            ", content='" + content + '\'' +
+            ", writer='" + writer + '\'' +
+            '}';
+    }
 }

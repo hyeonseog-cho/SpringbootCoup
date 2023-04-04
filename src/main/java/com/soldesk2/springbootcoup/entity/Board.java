@@ -38,4 +38,16 @@ public class Board {
 		this.comments.add(comment);
 		comment.setBoard(this);
 	}
+	@Override
+    public String toString() {
+        return "Board{" +
+                "index=" + index +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                ", date=" + date +
+                ", readCount=" + readCount +
+                ", comments=" + comments +
+                '}';
+    }
 }
