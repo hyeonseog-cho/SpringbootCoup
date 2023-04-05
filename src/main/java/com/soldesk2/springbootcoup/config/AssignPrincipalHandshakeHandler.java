@@ -4,9 +4,11 @@ import java.lang.reflect.Array;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
@@ -24,6 +26,8 @@ import com.soldesk2.springbootcoup.entity.Member;
 public class AssignPrincipalHandshakeHandler extends DefaultHandshakeHandler {
     private static final String ATTR_PRINCIPAL = "__principal__";
 
+    // private Set<String> usednames = new HashSet<>();
+
     private static final List<String> first_names = Arrays.asList(
         "김", "이", "박", "최", "정", "강", "조", "윤", "장", "임", "한", "오",
         "서", "신", "권", "황", "안", "송", "류", "전", "홍", "고", "문", "양",
@@ -40,6 +44,7 @@ public class AssignPrincipalHandshakeHandler extends DefaultHandshakeHandler {
 
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
+        
         final String name;
         if (!attributes.containsKey(ATTR_PRINCIPAL)) {
             name = generateRandomUsername();
@@ -47,6 +52,14 @@ public class AssignPrincipalHandshakeHandler extends DefaultHandshakeHandler {
         } else {
             name = (String) attributes.get(ATTR_PRINCIPAL);
         }
+
+        // final String name = request.getURI().getQuery().split("=")[1];
+        // if (usednames.contains(name) || name.equals("fail")) {
+        //     String failMessage = "fail";
+        //     attributes.put("failMessage", failMessage);
+        // }
+        // usednames.add(nickname);
+
         return new Principal() {
             @Override
             public String getName() {

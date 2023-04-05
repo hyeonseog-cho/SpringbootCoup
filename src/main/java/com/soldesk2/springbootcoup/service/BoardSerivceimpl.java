@@ -64,8 +64,6 @@ public class BoardSerivceimpl implements BoardService{
 			return false;
 		}
 
-		System.out.println(findboard.get().getWriter());
-		System.out.println(wrtier);
 		if (!findboard.get().getWriter().equals(wrtier)) {
 			return false;
 		}
@@ -105,7 +103,9 @@ public class BoardSerivceimpl implements BoardService{
 			return null;
 		}
 
-		commentRepository.save(comment);
+		Comment updatedComment = findcomment.get();
+    	updatedComment.setContent(comment.getContent());
+    	commentRepository.save(updatedComment);
 		return board.get();
 	}
 
