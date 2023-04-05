@@ -42,20 +42,17 @@ public class BoardSerivceimpl implements BoardService{
 		Board add_board = boardRepository.save(board);
 		return add_board;
 	}
-
-	@Override
-	public Board check_Board(Long idx) {
-		Optional<Board> check_board = boardRepository.findById(idx);
-		if (check_board.isPresent()) {
-			return check_board.get();
-		} else {
-			return null;
-		}
-	}
 	
 	@Override
 	public Board update_Board(Board board) {
-		if (!boardRepository.existsById(board.getIndex())) {
+		Optional<Board> findboard = boardRepository.findById(board.getIndex());
+		if (!findboard.isPresent()) {
+			return null;
+		}
+
+		System.out.println(findboard.get().getWriter());
+		System.out.println(board.getWriter());
+		if (!findboard.get().getWriter().equals(board.getWriter())) {
 			return null;
 		}
 
@@ -63,8 +60,13 @@ public class BoardSerivceimpl implements BoardService{
 	}
 	
 	@Override
-	public boolean delete_Board(Long idx) {
-		if (!boardRepository.existsById(idx)) {
+	public boolean delete_Board(Long idx, String wrtier) {
+		Optional<Board> findboard = boardRepository.findById(idx);
+		if (!findboard.isPresent()) {
+			return false;
+		}
+
+		if (!findboard.get().getWriter().equals(wrtier)) {
 			return false;
 		}
 		
@@ -76,7 +78,7 @@ public class BoardSerivceimpl implements BoardService{
 	@Override
 	public Board add_comment(Long idx, Comment comment) {
 		Optional<Board> board = boardRepository.findById(idx);
-		if(!board.isPresent()) {
+		if (!board.isPresent()) {
 			return null;
 		}
 		Board add_comment_board = board.get();
@@ -90,12 +92,16 @@ public class BoardSerivceimpl implements BoardService{
 	@Override
 	public Board update_comment(Long idx, Comment comment) {
 		Optional<Board> board = boardRepository.findById(idx);
-		if(!board.isPresent()) {
+		if (!board.isPresent()) {
 			return null;
 		}
 
 		Optional<Comment> findcomment = commentRepository.findById(comment.getId());
-		if(!findcomment.isPresent()) {		
+		if (!findcomment.isPresent()) {		
+			return null;
+		}
+
+		if (!findcomment.get().getWriter().equals(comment.getWriter())) {
 			return null;
 		}
 
@@ -104,18 +110,22 @@ public class BoardSerivceimpl implements BoardService{
 	}
 
 	@Override
-	public Boolean delete_comment(Long idx, Long id) {
+	public Boolean delete_comment(Long idx, Comment comment) {
 		Optional<Board> board = boardRepository.findById(idx);
-		if(!board.isPresent()) {
+		if (!board.isPresent()) {
 			return false;
 		}
 
-		Optional<Comment> findcomment = commentRepository.findById(id);
-		if(!findcomment.isPresent()) {		
+		Optional<Comment> findcomment = commentRepository.findById(comment.getId());
+		if (!findcomment.isPresent()) {		
 			return false;
 		}
 
-		commentRepository.deleteById(id);
+		if (!findcomment.get().getWriter().equals(comment.getWriter())) {
+			return false;
+		}
+
+		commentRepository.deleteById(comment.getId());
 		return true;
 	}
 

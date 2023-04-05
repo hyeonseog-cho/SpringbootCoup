@@ -49,18 +49,7 @@ public class BoardController {
 	}
 	
 	@PutMapping("/board")
-	public ResponseEntity<Board> Update_Board(@RequestBody Board board) { // PUT / 게시글 수정
-		Board checkboard = boardService.check_Board(board.getIndex());
-		if (checkboard == null) {
-			return ResponseEntity.noContent().build();
-		}
-		else {
-			board.setIndex(checkboard.getIndex());
-			board.setReadCount(checkboard.getReadCount());
-			board.setWriter(checkboard.getWriter());
-			board.setDate(checkboard.getDate());
-		}
-
+	public ResponseEntity<Board> Update_Board(@RequestBody Board board) { // PUT / 게시글 수정		
 		Board updateBoard = boardService.update_Board(board);
 
 		// 값이 없을시 
@@ -73,8 +62,8 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/board/{idx}")
-	public ResponseEntity<Board> Delete_Board(@PathVariable("idx") Long idx) { // DELETE / 게시글 삭제
-		if (boardService.delete_Board(idx)) {
+	public ResponseEntity<Board> Delete_Board(@PathVariable("idx") Long idx, String writer) { // DELETE / 게시글 삭제
+		if (boardService.delete_Board(idx, writer)) {
 			return ResponseEntity.ok().build();
 		}
 		
@@ -104,9 +93,9 @@ public class BoardController {
 	}
 
 	@DeleteMapping("/board/reply/{idx}")
-	public ResponseEntity<Board> Delete_Reply(@PathVariable("idx") Long idx, @RequestBody Long id) { // DELETE / 댓글 삭제
+	public ResponseEntity<Board> Delete_Reply(@PathVariable("idx") Long idx, @RequestBody Comment comment) { // DELETE / 댓글 삭제
 
-		if (boardService.delete_comment(idx, id)) {
+		if (boardService.delete_comment(idx, comment)) {
 			return ResponseEntity.ok().build();
 		}
 
