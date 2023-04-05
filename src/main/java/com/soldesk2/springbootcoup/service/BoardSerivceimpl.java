@@ -82,6 +82,7 @@ public class BoardSerivceimpl implements BoardService{
 		Board add_comment_board = board.get();
 		comment.setBoard(add_comment_board);
 		add_comment_board.getComments().add(comment);
+		boardRepository.save(add_comment_board);
 		
 		return add_comment_board;
 	}

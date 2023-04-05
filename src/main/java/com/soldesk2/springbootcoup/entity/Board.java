@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +18,10 @@ import lombok.Data;
 @Entity
 @Data
 public class Board {
+
+	public Board() {
+	}
+	
 	@Id //pk
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long index; //자동증가
@@ -32,6 +38,7 @@ public class Board {
 	private Long readCount;
 
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL) // board와 연결, board의 변화가 모든 영향을 끼치도록 설정
+	@JsonIgnoreProperties({"board"}) // Comment 객체를 JSON으로 변환할 때 Board 객체를 무시
 	private List<Comment> comments = new ArrayList<>();
 
 	public void addComment(Comment comment) {

@@ -2,6 +2,8 @@ package com.soldesk2.springbootcoup.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +17,10 @@ import lombok.Data;
 @Entity
 @Data
 public class Comment {
+
+    public Comment() {
+    }
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
