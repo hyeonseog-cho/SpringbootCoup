@@ -28,8 +28,8 @@ public class BoardSerivceimpl implements BoardService{
 	}
 	
 	@Override
-	public Board get_Board(Long idx) {
-		Optional<Board> vo = boardRepository.findById(idx);
+	public Board get_Board(Long index) {
+		Optional<Board> vo = boardRepository.findById(index);
 		if (vo.isPresent()) {
 			return vo.get();
 		} else {
@@ -50,8 +50,6 @@ public class BoardSerivceimpl implements BoardService{
 			return null;
 		}
 
-		System.out.println(findboard.get().getWriter());
-		System.out.println(board.getWriter());
 		if (!findboard.get().getWriter().equals(board.getWriter())) {
 			return null;
 		}
@@ -60,24 +58,26 @@ public class BoardSerivceimpl implements BoardService{
 	}
 	
 	@Override
-	public boolean delete_Board(Long idx, String wrtier) {
-		Optional<Board> findboard = boardRepository.findById(idx);
+	public boolean delete_Board(Long index, String wrtier) {
+		Optional<Board> findboard = boardRepository.findById(index);
 		if (!findboard.isPresent()) {
 			return false;
 		}
 
+		System.out.println(findboard.get().getWriter());
+		System.out.println(wrtier);
 		if (!findboard.get().getWriter().equals(wrtier)) {
 			return false;
 		}
 		
-		boardRepository.deleteById(idx);
+		boardRepository.deleteById(index);
 		return true;
 		
 	}
 
 	@Override
-	public Board add_comment(Long idx, Comment comment) {
-		Optional<Board> board = boardRepository.findById(idx);
+	public Board add_comment(Long index, Comment comment) {
+		Optional<Board> board = boardRepository.findById(index);
 		if (!board.isPresent()) {
 			return null;
 		}
@@ -90,13 +90,13 @@ public class BoardSerivceimpl implements BoardService{
 	}
 
 	@Override
-	public Board update_comment(Long idx, Comment comment) {
-		Optional<Board> board = boardRepository.findById(idx);
+	public Board update_comment(Long index, Comment comment) {
+		Optional<Board> board = boardRepository.findById(index);
 		if (!board.isPresent()) {
 			return null;
 		}
 
-		Optional<Comment> findcomment = commentRepository.findById(comment.getId());
+		Optional<Comment> findcomment = commentRepository.findById(comment.getIdx());
 		if (!findcomment.isPresent()) {		
 			return null;
 		}
@@ -110,13 +110,13 @@ public class BoardSerivceimpl implements BoardService{
 	}
 
 	@Override
-	public Boolean delete_comment(Long idx, Comment comment) {
-		Optional<Board> board = boardRepository.findById(idx);
+	public Boolean delete_comment(Long index, Comment comment) {
+		Optional<Board> board = boardRepository.findById(index);
 		if (!board.isPresent()) {
 			return false;
 		}
 
-		Optional<Comment> findcomment = commentRepository.findById(comment.getId());
+		Optional<Comment> findcomment = commentRepository.findById(comment.getIdx());
 		if (!findcomment.isPresent()) {		
 			return false;
 		}
@@ -125,7 +125,7 @@ public class BoardSerivceimpl implements BoardService{
 			return false;
 		}
 
-		commentRepository.deleteById(comment.getId());
+		commentRepository.deleteById(comment.getIdx());
 		return true;
 	}
 

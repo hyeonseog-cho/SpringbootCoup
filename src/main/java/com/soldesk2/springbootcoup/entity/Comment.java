@@ -23,7 +23,7 @@ public class Comment {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idx;
 
     private String content;
     private String writer;
@@ -38,7 +38,7 @@ public class Comment {
     @Override
     public String toString() {
     return "Comment{" +
-            "id=" + id +
+            "idx=" + idx +
             ", content='" + content + '\'' +
             ", writer='" + writer + '\'' +
             '}';

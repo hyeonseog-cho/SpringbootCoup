@@ -29,9 +29,9 @@ public class BoardController {
 		return boardService.get_List();
 	}
 	
-	@GetMapping("/board/{idx}")
-	public ResponseEntity<Board> Find_Board(@PathVariable("idx") Long idx) { // GET / idx로 게시글 검색
-		Board boardData = boardService.get_Board(idx);
+	@GetMapping("/board/{index}")
+	public ResponseEntity<Board> Find_Board(@PathVariable("index") Long index) { // GET / index로 게시글 검색
+		Board boardData = boardService.get_Board(index);
 
 		if (boardData == null) {
 			return ResponseEntity.noContent().build();
@@ -61,19 +61,19 @@ public class BoardController {
 
 	}
 	
-	@DeleteMapping("/board/{idx}")
-	public ResponseEntity<Board> Delete_Board(@PathVariable("idx") Long idx, String writer) { // DELETE / 게시글 삭제
-		if (boardService.delete_Board(idx, writer)) {
+	@DeleteMapping("/board/{index}")
+	public ResponseEntity<Board> Delete_Board(@PathVariable("index") Long index, @RequestBody Comment comment) { // DELETE / 게시글 삭제
+		if (boardService.delete_Board(index, comment.getWriter())) {
 			return ResponseEntity.ok().build();
 		}
 		
 		return ResponseEntity.noContent().build();
 	}
 
-	@PostMapping("/board/reply/{idx}")
-	public ResponseEntity<Board> Add_Reply(@PathVariable("idx") Long idx, @RequestBody Comment comment) { // POST / 댓글 작성
+	@PostMapping("/board/reply/{index}")
+	public ResponseEntity<Board> Add_Reply(@PathVariable("index") Long index, @RequestBody Comment comment) { // POST / 댓글 작성
 
-		Board add_comment = boardService.add_comment(idx, comment);
+		Board add_comment = boardService.add_comment(index, comment);
 		if (add_comment == null){
 			return ResponseEntity.noContent().build();
 		}
@@ -81,10 +81,10 @@ public class BoardController {
 		return ResponseEntity.ok(add_comment);
 	}
 
-	@PutMapping("/board/reply/{idx}")
-	public ResponseEntity<Board> Update_Reply(@PathVariable("idx") Long idx, @RequestBody Comment comment) { // PUT / 댓글 수정
+	@PutMapping("/board/reply/{index}")
+	public ResponseEntity<Board> Update_Reply(@PathVariable("index") Long index, @RequestBody Comment comment) { // PUT / 댓글 수정
 
-		Board update_comment = boardService.update_comment(idx, comment);
+		Board update_comment = boardService.update_comment(index, comment);
 		if (update_comment == null){
 			return ResponseEntity.noContent().build();
 		}
@@ -92,10 +92,10 @@ public class BoardController {
 		return null;
 	}
 
-	@DeleteMapping("/board/reply/{idx}")
-	public ResponseEntity<Board> Delete_Reply(@PathVariable("idx") Long idx, @RequestBody Comment comment) { // DELETE / 댓글 삭제
+	@DeleteMapping("/board/reply/{index}")
+	public ResponseEntity<Board> Delete_Reply(@PathVariable("index") Long index, @RequestBody Comment comment) { // DELETE / 댓글 삭제
 
-		if (boardService.delete_comment(idx, comment)) {
+		if (boardService.delete_comment(index, comment)) {
 			return ResponseEntity.ok().build();
 		}
 
