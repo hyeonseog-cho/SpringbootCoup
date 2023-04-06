@@ -4,10 +4,9 @@ spring:
   #     name: user
   #     password: testpw
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: myuser
+    username: coup
     url: jdbc:mysql:3.36.196.244
-    password: mypassword
+    password: 12345
   jpa:
     hibernate:
       ddl-auto: update
