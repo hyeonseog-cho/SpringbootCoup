@@ -1,12 +1,17 @@
 spring:
-  security:
-    user:
-      name: user
-      password: testpw
-  # mvc:
-  #   view:
-  #     prefix: /WEB-INF/view/
-  #     suffix: .jsp
+  # security:
+  #   user:
+  #     name: user
+  #     password: testpw
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: myuser
+    url: jdbc:mysql://<EC2_INSTANCE_PUBLIC_IP>:3306/mydatabase
+    password: mypassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+
   
   devtools:
     restart:
