@@ -12,7 +12,7 @@ import com.soldesk2.springbootcoup.repository.BoardRepository;
 import com.soldesk2.springbootcoup.repository.CommentRepository;
 
 @Service
-public class BoardSerivceimpl implements BoardService{
+public class BoardSerivceimpl implements BoardService {
 	
 	@Autowired
 	BoardRepository boardRepository;

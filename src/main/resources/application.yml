@@ -1,15 +1,15 @@
 spring:
-  # security:
-  #   user:
-  #     name: user
-  #     password: testpw
-  datasource:
-    username: coup
-    url: jdbc:mysql:3.36.196.244
-    password: 12345
-  jpa:
-    hibernate:
-      ddl-auto: update
+  security:
+    user:
+      name: user
+      password: testpw
+  # datasource:
+  #   username: coup
+  #   url: jdbc:mysql:3.36.196.244
+  #   password: 12345
+  # jpa:
+  #   hibernate:
+  #     ddl-auto: update
 
   
   devtools:
