@@ -22,12 +22,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 
+import com.soldesk2.springbootcoup.controller.loginController;
 import com.soldesk2.springbootcoup.game.Action;
 import com.soldesk2.springbootcoup.game.Card;
 import com.soldesk2.springbootcoup.game.CounterAction;
 import com.soldesk2.springbootcoup.game.Player;
+import com.soldesk2.springbootcoup.service.LoginService;
+import com.soldesk2.springbootcoup.service.LoginServiceimpl;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -45,6 +50,8 @@ public class WebGame {
     private static final long ACTION_TIMEOUT_SECONDS = 45;
     private volatile boolean gameRunning = false;
 
+    public LoginService loginService;
+
     // 게임 시작시 접속한 플레이어들 이름 목록
     String[] playerNames;
 
@@ -53,18 +60,23 @@ public class WebGame {
     private List<Card> deck;
     private final String destination;
 
-    public WebGame(String destination, SimpMessagingTemplate simpMessagingTemplate) {
+    // 승리한 플레이어
+    public String WinId;
+
+    public WebGame(String destination, SimpMessagingTemplate simpMessagingTemplate, LoginService loginservice) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.random = new Random();
         this.destination = destination;
         this.playerActionQueueMap = new HashMap<>();
+        this.loginService = loginservice;
 
         logger.setLevel(Level.DEBUG);
         logger.debug("게임 생성됨.");
     }
 
-    public void play(String[] playerNames) {
+    public void play(String[] playerNames, HashMap<String, String> playerinfo) {
         this.playerNames = playerNames;
+        System.out.println(playerinfo);
 
         Message message = new Message(MessageType.START, "게임 시작", "게임 시작");
         sendToAllPlayers(message);
@@ -150,7 +162,7 @@ public class WebGame {
 
             // 남아 있는 플레이어가 승리한다.
             playerWon(Arrays.stream(players).filter(Objects::nonNull).findFirst()
-                    .orElseThrow(IllegalStateException::new));
+                    .orElseThrow(IllegalStateException::new), playerinfo);
 
             this.endGame();
 
@@ -182,9 +194,12 @@ public class WebGame {
      * 
      * @param player 게임에 승리한 플레이어
      */
-    void playerWon(Player player) {
+    void playerWon(Player player, HashMap<String, String> playerinfo) {
         logger.info("플레이어 {}가 승리했다.", player.getName());
         this.sendToAllPlayers("플레이어 " + player.getName() + "가 승리했다.");
+        String WinId = playerinfo.get(player.getName());
+        System.out.println(WinId);
+        loginService.wincountup(WinId);
     }
 
     /**
@@ -792,6 +807,10 @@ public class WebGame {
 
             return message;
         }
+    }
+
+    public void setWinId(String id) {
+        this.WinId = id;
     }
 
     /**

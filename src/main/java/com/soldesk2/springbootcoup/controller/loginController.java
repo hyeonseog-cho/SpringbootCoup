@@ -20,4 +20,8 @@ public class loginController {
         return loginService.get_user(user);
     }
 
+    public void WinCountup(String userId) {
+        System.out.println(userId);
+        loginService.wincountup(userId);
+    }
 }

@@ -58,7 +58,10 @@ public class AssignPrincipalHandshakeHandler extends DefaultHandshakeHandler {
         //     String failMessage = "fail";
         //     attributes.put("failMessage", failMessage);
         // }
-        // usednames.add(nickname);
+        // usednames.add(name);
+
+
+        
 
         return new Principal() {
             @Override

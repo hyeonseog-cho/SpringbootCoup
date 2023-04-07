@@ -31,4 +31,13 @@ public class LoginServiceimpl implements LoginService{
         }
     }
 
+    @Override
+    public void wincountup(String id) {
+        Optional<Member> finduser = loginRepository.findById(id);
+        Member updateuser = finduser.get();
+        updateuser.setWincount(updateuser.getWincount() + 1);
+        System.out.println(updateuser.getWincount());
+        loginRepository.save(updateuser);
+    }
+
 }
