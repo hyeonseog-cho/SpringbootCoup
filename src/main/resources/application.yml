@@ -15,11 +15,11 @@ spring:
 
 server:
   port: 5000
-  datasource:
-      username: admin
-      url: jdbc:mysql://3.36.196.244:3306/coup
-      driverClassName: com.mysql.jdbc.Driver
-      password: 12345
-  jpa:
-      hibernate:
-          ddl-auto: update
+  # datasource:
+  #     username: admin
+  #     url: jdbc:mysql://3.36.196.244:3306/coup
+  #     driverClassName: com.mysql.jdbc.Driver
+  #     password: 12345
+  # jpa:
+  #     hibernate:
+  #         ddl-auto: update
