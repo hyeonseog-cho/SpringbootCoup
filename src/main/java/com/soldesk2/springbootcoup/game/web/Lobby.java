@@ -37,6 +37,7 @@ public class Lobby {
     public List<String> playerNames;
 
     public HashMap<String, String> playerinfo;
+    public LoginService loginService;
     
     public Lobby(String name, SimpMessagingTemplate simpMessagingTemplate, LoginService loginService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
@@ -45,6 +46,7 @@ public class Lobby {
         this.playerNames = new ArrayList<>();
         this.playerinfo = new HashMap<>();
         this.state = State.OPEN;
+        this.loginService = loginService;
         this.game = new WebGame(destination, simpMessagingTemplate, loginService);
     }
 

@@ -3,6 +3,7 @@ package com.soldesk2.springbootcoup.game.web;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -187,8 +188,9 @@ public class WebGameController {
     @Scheduled(fixedDelay = 15000)
     void cleanUp() {
         logger.debug("로비 리스트 정리 시작");
-        for (String lobbyName : lobbyList.keySet()) {
-
+        Iterator<String> iterator = lobbyList.keySet().iterator();
+        while (iterator.hasNext()) {
+            String lobbyName = iterator.next();
             Lobby lobby = lobbyList.get(lobbyName);
             List<String> lobbyPlayers = lobby.getPlayerNames();
 
@@ -202,7 +204,7 @@ public class WebGameController {
 
             if (lobby.getState() == Lobby.State.ENDED) {
                 logger.info("로비 {} 삭제", lobbyName);
-                lobbyList.remove(lobbyName);
+                iterator.remove();
                 lobby = null;
             }
         }
