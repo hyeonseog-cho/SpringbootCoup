@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
 
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,7 @@ public class WebGame {
     public Map<String, Queue<String>> playerActionQueueMap;
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
-
-    private static final long ACTION_TIMEOUT_SECONDS = 45;
+    
     private volatile boolean gameRunning = false;
 
     public LoginService loginService;
@@ -116,15 +116,41 @@ public class WebGame {
 
             // 게임이 끝날 때까지 반복
             while (alivePlayers() > 1 && gameRunning) {
+                update();
+                
+                for (int i = 0; i < players.length; i++) {
+                    if (players[i] != null && players[i].getCardNumbers() == 0) {
+                        log("플레이어 %s가 사망했다.", players[i].getName());
+                        players[i] = null;
+                    }
+                }
+
                 // 행동할 플레이어를 정한다.
                 Player nowPlayer = players[playerIndex];
                 // 플레이어가 할 액션을 프론트에 요청한다.
                 Action action = getAction(nowPlayer);
 
+                if (action == null) {
+                    playerIndex = (playerIndex + 1) % players.length;
+                    continue;
+                }
+
                 logger.debug("Action chosen : {}, Is action targeted? {}", action, action.targeted);
 
                 // 타겟이 있는 액션이라면 타겟을 요청하여 받는다
                 Player target = action.targeted ? getTarget(nowPlayer) : null;
+
+                if (target != null && target.getName().equals("NullpotintException")) {
+                    playerIndex = (playerIndex + 1) % players.length;
+                    continue;
+                }
+
+                for (int i = 0; i < players.length; i++) {
+                    if (players[i] != null && players[i].getCardNumbers() == 0) {
+                        log("플레이어 %s가 사망했다.", players[i].getName());
+                        players[i] = null;
+                    }
+                }
 
                 if (target != null) {
                     if (action.card != null) {
@@ -150,8 +176,6 @@ public class WebGame {
                         players[i] = null;
                     }
                 }
-
-                update();
 
                 // 행동할 플레이어를 다음 플레이어로 변경한다.
                 do {
@@ -179,7 +203,10 @@ public class WebGame {
         // 자기 자신은 대상이 될 수 없음
         options.remove(player);
 
-        return getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.");
+        if (getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.") != null) {
+            return getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.");
+        }
+        return new Player("NullpotintException", null, null);   
     }
 
     void log(String format, Object... args) {
@@ -257,8 +284,10 @@ public class WebGame {
 
         // 카운터 액션이 없다면 바로 액션을 실행한다.
         if (counterAction == null) {
-            handleAction(action, player, target);
-            return true;
+            if (handleAction(action, player, target) == 0) {
+                return true;
+            }
+            return false;
         }
 
         // 카운터 액션이 있다면 카운터 액션을 먼저 실행한다.
@@ -313,43 +342,54 @@ public class WebGame {
             }
         }
 
-        handleAction(action, player, target);
-        return true;
+        if (handleAction(action, player, target) == 0) {
+            return true;
+        }
+        return false;
     }
 
-    private void handleAction(Action action, Player player, Player target) throws InterruptedException {
+    private int handleAction(Action action, Player player, Player target) throws InterruptedException {
         logger.debug("Action {} by {} on {}", action, player, target);
 
         switch (action) {
             case Income:
                 player.coins++;
-                break;
+                return 0;
 
             case ForeignAid:
                 player.coins += 2;
-                break;
+                return 0;
 
             case Tax:
                 player.coins += 3;
-                break;
+                return 0;
 
             case Assassinate:
             case Coup:
+                if (target == null) {
+                    return -1;
+                }
                 sacrificeCard(target);
-                break;
+                return 0;
 
             case Exchange:
                 exchange(player);
-                break;
+                return 0;
 
             case Steal:
+                if (target == null) {
+                    return -1;
+                }
                 int removed = Math.min(Objects.requireNonNull(target).coins, 2);
                 target.coins -= removed;
                 player.coins += removed;
-                break;
+                return 0;
 
             case Block:
-                break;
+                return 0;
+
+            default:
+                return -1;
         }
     }
 
@@ -505,7 +545,7 @@ public class WebGame {
                 }, executorService);
 
         try {
-            String response = futureResponse.get();
+            String response = futureResponse.get(10, TimeUnit.SECONDS);
 
             for (int i = 0; i < choices.length; i++) {
                 if (choices[i].toString().equals(response)) {
@@ -513,16 +553,21 @@ public class WebGame {
                     return choices[i];
                 }
             }
-
-        // } catch (TimeoutException e) {
-        //     logger.warn("플레이어 {}로부터 응답을 받는 도중 시간 초과 발생", player.getName(), e);
-        //     futureResponse.cancel(true);
-
-        //     // 랜덤으로 골라 하나 보냄.
-        //     return choices[random.nextInt(choices.length)];
-
-        } catch (CancellationException e) {
+        } catch (TimeoutException e) {
+            logger.debug("플레이어 {}로부터 응답을 받는 도중 시간 초과 발생", player.getName(), e);
+            futureResponse.cancel(true);
+            for (int i = 0; i<players.length; i++) {
+                if (players[i] != null && players[i].getName().equals(player.getName())) {
+                    players[i] = null;
+                }
+            }
+            logger.info("플레이어 {}를 제거합니다.", player);
+            sendToAllPlayers("시간 초과! " + player.getName() + "가 게임에서 나갔다");
+            return null;
+        }
+        catch (CancellationException e) {
             logger.info("플레이어 {}로부터 응답을 받는 도중 취소됨.", player.getName(), e);
+            futureResponse.cancel(true);
             return null;
         } catch (ExecutionException e) {
             logger.warn("플레이어 {}로부터 응답을 받는 도중 오류 발생", player.getName(), e);
@@ -677,6 +722,10 @@ public class WebGame {
             try {
                 String result = future.get();
 
+                if (result == null) {
+                    result = "pass";
+                }
+
                 if (!result.equalsIgnoreCase("pass")) {
                     nonPassResult = future;
                     for (CompletableFuture<String> otherFuture : futureList) {
@@ -688,7 +737,7 @@ public class WebGame {
                 }
             } catch (ExecutionException | InterruptedException e) {
                 logger.error("Future operations error", e);
-            }
+            } 
         }
 
         // 모든 플레이어에게 선택이 끝났다는걸 전달한다.
@@ -809,6 +858,10 @@ public class WebGame {
         }
     }
 
+    /**
+     * 
+     * @param id // 승리한 유저의 Id
+     */
     public void setWinId(String id) {
         this.WinId = id;
     }
@@ -829,6 +882,7 @@ public class WebGame {
     }
 
     public void endGame() {
+        playerActionQueueMap.clear();
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {

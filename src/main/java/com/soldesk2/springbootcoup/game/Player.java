@@ -38,7 +38,6 @@ public class Player {
         return this.name;
     }
 
-
     public List<Card> getCards() {
         return this.cards;
     }
@@ -50,7 +49,6 @@ public class Player {
     public boolean hasCard(Card card) {
         return this.cards.contains(card);
     }
-
 
     public Card getCard(Card card){
         return card;
@@ -73,5 +71,4 @@ public class Player {
     public String toString() {
         return this.name; 
     }
-
 }
