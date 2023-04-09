@@ -21,8 +21,12 @@ public class LoginServiceimpl implements LoginService {
         if (!finduser.isPresent()) {
             return "-1"; // 사용자가 존재하지 않음
         } else {
+            System.out.println(finduser.get().getId());
             System.out.println(finduser.get().getPassword());
+            System.out.println(finduser.get().getNickname());
+            System.out.println(user.getId());
             System.out.println(user.getPassword());
+            System.out.println(user.getNickname());
             if (finduser.get().getPassword().equals(user.getPassword())) {
                 return "1"; // 기존 id / db pw와 입력 pw가 같을 때
             }

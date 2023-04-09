@@ -13,20 +13,19 @@ import com.soldesk2.springbootcoup.repository.CommentRepository;
 
 @Service
 public class BoardSerivceimpl implements BoardService {
-	
+
 	@Autowired
 	BoardRepository boardRepository;
 
 	@Autowired
 	CommentRepository commentRepository;
-	
 
 	@Override
-	public List<Board> get_List(){
+	public List<Board> get_List() {
 		List<Board> li = boardRepository.findAll();
 		return li;
 	}
-	
+
 	@Override
 	public Board get_Board(Long index) {
 		Optional<Board> vo = boardRepository.findById(index);
@@ -36,13 +35,13 @@ public class BoardSerivceimpl implements BoardService {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Board add_Board(Board board) {
 		Board add_board = boardRepository.save(board);
 		return add_board;
 	}
-	
+
 	@Override
 	public Board update_Board(Board board) {
 		Optional<Board> findboard = boardRepository.findById(board.getIndex());
@@ -56,7 +55,7 @@ public class BoardSerivceimpl implements BoardService {
 
 		return boardRepository.save(board);
 	}
-	
+
 	@Override
 	public boolean delete_Board(Long index, String wrtier) {
 		Optional<Board> findboard = boardRepository.findById(index);
@@ -67,10 +66,10 @@ public class BoardSerivceimpl implements BoardService {
 		if (!findboard.get().getWriter().equals(wrtier)) {
 			return false;
 		}
-		
+
 		boardRepository.deleteById(index);
 		return true;
-		
+
 	}
 
 	@Override
@@ -83,7 +82,7 @@ public class BoardSerivceimpl implements BoardService {
 		comment.setBoard(add_comment_board);
 		add_comment_board.getComments().add(comment);
 		boardRepository.save(add_comment_board);
-		
+
 		return add_comment_board;
 	}
 
@@ -95,7 +94,7 @@ public class BoardSerivceimpl implements BoardService {
 		}
 
 		Optional<Comment> findcomment = commentRepository.findById(comment.getIdx());
-		if (!findcomment.isPresent()) {		
+		if (!findcomment.isPresent()) {
 			return null;
 		}
 
@@ -104,8 +103,8 @@ public class BoardSerivceimpl implements BoardService {
 		}
 
 		Comment updatedComment = findcomment.get();
-    	updatedComment.setContent(comment.getContent());
-    	commentRepository.save(updatedComment);
+		updatedComment.setContent(comment.getContent());
+		commentRepository.save(updatedComment);
 		return board.get();
 	}
 
@@ -117,7 +116,7 @@ public class BoardSerivceimpl implements BoardService {
 		}
 
 		Optional<Comment> findcomment = commentRepository.findById(comment.getIdx());
-		if (!findcomment.isPresent()) {		
+		if (!findcomment.isPresent()) {
 			return false;
 		}
 
