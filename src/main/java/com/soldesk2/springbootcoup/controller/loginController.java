@@ -17,7 +17,11 @@ public class loginController {
 
     @PostMapping("/login")
     public String login(@RequestBody Member user) {
-        return loginService.get_user(user);
+        return loginService.login(user);
     }
 
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody Member user) {
+        return loginService.signUp(user);
+    }
 }

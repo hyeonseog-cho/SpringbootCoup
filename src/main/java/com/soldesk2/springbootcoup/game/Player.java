@@ -17,7 +17,7 @@ public class Player {
         cards.add(card2);
         lostcards = new ArrayList<>(2);
     }
-    
+
     public void addCard(Card card) {
         cards.add(card);
     }
@@ -38,7 +38,6 @@ public class Player {
         return this.name;
     }
 
-
     public List<Card> getCards() {
         return this.cards;
     }
@@ -51,12 +50,11 @@ public class Player {
         return this.cards.contains(card);
     }
 
-
-    public Card getCard(Card card){
+    public Card getCard(Card card) {
         return card;
     }
-    
-    public void setLostCard(Card card){
+
+    public void setLostCard(Card card) {
         if (cards.contains(card)) {
             cards.remove(card);
             lostcards.add(card);
@@ -65,13 +63,13 @@ public class Player {
         }
     }
 
-    public List<Card> getLostCard(){
+    public List<Card> getLostCard() {
         return this.lostcards;
     }
 
     @Override
     public String toString() {
-        return this.name; 
+        return this.name;
     }
 
 }

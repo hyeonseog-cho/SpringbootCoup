@@ -9,18 +9,17 @@ import com.soldesk2.springbootcoup.entity.Member;
 import com.soldesk2.springbootcoup.repository.LoginRepository;
 
 @Service
-public class LoginServiceimpl implements LoginService{
+public class LoginServiceimpl implements LoginService {
 
     @Autowired
     LoginRepository loginRepository;
 
     @Override
-    public String get_user(Member user) {
-        Optional<Member> finduser = loginRepository.findById(user.getId());        
-    
-        if(!finduser.isPresent()) {
-            loginRepository.save(user);
-            return "-1";  // 새로 생성한 id
+    public String login(Member user) {
+        Optional<Member> finduser = loginRepository.findById(user.getId());
+
+        if (!finduser.isPresent()) {
+            return "-1"; // 사용자가 존재하지 않음
         } else {
             System.out.println(finduser.get().getPassword());
             System.out.println(user.getPassword());
@@ -31,4 +30,15 @@ public class LoginServiceimpl implements LoginService{
         }
     }
 
+    @Override
+    public String signUp(Member user) {
+        Optional<Member> finduser = loginRepository.findById(user.getId());
+
+        if (!finduser.isPresent()) {
+            loginRepository.save(user);
+            return "-3"; // 회원 가입 성공
+        } else {
+            return "-4"; // 이미 존재하는 아이디
+        }
+    }
 }
