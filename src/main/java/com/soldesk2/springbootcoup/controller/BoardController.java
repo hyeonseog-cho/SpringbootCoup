@@ -50,20 +50,28 @@ public class BoardController {
 	
 	@PutMapping("/board")
 	public ResponseEntity<Board> Update_Board(@RequestBody Board board) { // PUT / 게시글 수정		
-		Board updateBoard = boardService.update_Board(board);
-
-		// 값이 없을시 
-		if (updateBoard == null) {
+		Board checkboard = boardService.check_Board(board.getIndex());
+		// 값이 없을 시 
+		if (checkboard == null) {
 			return ResponseEntity.noContent().build();
 		}
+		else {
+			board.setIndex(checkboard.getIndex());
+			board.setReadCount(checkboard.getReadCount());
+			board.setWriter(checkboard.getWriter());
+			board.setDate(checkboard.getDate());
+		}
+
+		Board updateBoard = boardService.update_Board(checkboard);
+
 
 		return ResponseEntity.ok(updateBoard);
 
 	}
 	
 	@DeleteMapping("/board/{index}")
-	public ResponseEntity<Board> Delete_Board(@PathVariable("index") Long index, @RequestBody Comment comment) { // DELETE / 게시글 삭제
-		if (boardService.delete_Board(index, comment.getWriter())) {
+	public ResponseEntity<Board> Delete_Board(@PathVariable("index") Long index, @RequestBody Board board) { // DELETE / 게시글 삭제
+		if (boardService.delete_Board(index, board.getWriter())) {
 			return ResponseEntity.ok().build();
 		}
 		

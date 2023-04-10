@@ -43,6 +43,16 @@ public class BoardSerivceimpl implements BoardService {
 	}
 
 	@Override
+	public Board check_Board(Long index) {
+		Optional<Board> check_board = boardRepository.findById(index);
+		if (check_board.isPresent()) {
+			return check_board.get();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public Board update_Board(Board board) {
 		Optional<Board> findboard = boardRepository.findById(board.getIndex());
 		if (!findboard.isPresent()) {
