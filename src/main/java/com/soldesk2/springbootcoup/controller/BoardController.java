@@ -70,8 +70,8 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/board/{index}")
-	public ResponseEntity<Board> Delete_Board(@PathVariable("index") Long index, @RequestBody Board board) { // DELETE / 게시글 삭제
-		if (boardService.delete_Board(index, board.getWriter())) {
+	public ResponseEntity<Board> Delete_Board(@PathVariable("index") Long index) { // DELETE / 게시글 삭제
+		if (boardService.delete_Board(index)) {
 			return ResponseEntity.ok().build();
 		}
 		

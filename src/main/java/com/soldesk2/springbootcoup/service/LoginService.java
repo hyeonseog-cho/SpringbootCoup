@@ -8,4 +8,6 @@ public interface LoginService {
 
     public String signUp(Member user); // 회원 가입
 
+    public int wincountup(String id);    // 유저의 승리횟수 증가
+
 }

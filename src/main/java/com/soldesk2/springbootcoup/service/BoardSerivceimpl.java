@@ -59,21 +59,13 @@ public class BoardSerivceimpl implements BoardService {
 			return null;
 		}
 
-		if (!findboard.get().getWriter().equals(board.getWriter())) {
-			return null;
-		}
-
 		return boardRepository.save(board);
 	}
 
 	@Override
-	public boolean delete_Board(Long index, String wrtier) {
+	public boolean delete_Board(Long index) {
 		Optional<Board> findboard = boardRepository.findById(index);
 		if (!findboard.isPresent()) {
-			return false;
-		}
-
-		if (!findboard.get().getWriter().equals(wrtier)) {
 			return false;
 		}
 

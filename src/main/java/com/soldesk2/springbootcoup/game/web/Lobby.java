@@ -1,12 +1,15 @@
 package com.soldesk2.springbootcoup.game.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+
+import com.soldesk2.springbootcoup.service.LoginService;
 
 import ch.qos.logback.classic.Logger;
 import lombok.Getter;
@@ -32,17 +35,22 @@ public class Lobby {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     public List<String> playerNames;
+
+    public HashMap<String, String> playerinfo;
+
+    public LoginService loginService;
     
-    public Lobby(String name, SimpMessagingTemplate simpMessagingTemplate) {
+    public Lobby(String name, SimpMessagingTemplate simpMessagingTemplate, LoginService loginService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.name = name;
         this.destination = "/lobby";
         this.playerNames = new ArrayList<>();
         this.state = State.OPEN;
-        this.game = new WebGame(destination, simpMessagingTemplate);
+        this.loginService = loginService;
+        this.game = new WebGame(destination, simpMessagingTemplate, loginService);
     }
 
-    public void addPlayer(String playerName) {
+    public void addPlayer(String playerName, String playerId) {
 
         if (this.playerNames.size() >= MAX_PLAYER) {
             throw new IllegalStateException("로비명 " + this.name + "은 가득 차있다. 현재 접속한 플레이어: " + this.getPlayerNames());
@@ -55,6 +63,7 @@ public class Lobby {
         logger.info("로비 {}에 {}가 접속했다.", this.name, playerName);
 
 
+        playerinfo.put(playerName, playerId);
         playerNames.add(playerName);
         updateAllPlayers("현재 접속한 로비 " + this.name + "에 " + playerName + "가 접속했다. \n" +
                         "현재 접속한 플레이어: " + this.playerNames +"\n"+ toString());
@@ -86,7 +95,7 @@ public class Lobby {
         logger.info("Game Started at lobbyName {}, State:", this.name, this.state);
         this.state = State.STARTED;
 
-        this.game.play(playerNamesArray);
+        this.game.play(playerNamesArray, playerinfo);
 
         this.state = State.ENDED;
     }

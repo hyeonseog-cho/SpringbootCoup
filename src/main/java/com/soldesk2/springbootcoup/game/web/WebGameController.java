@@ -3,6 +3,7 @@ package com.soldesk2.springbootcoup.game.web;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import com.google.gson.Gson;
+import com.soldesk2.springbootcoup.service.LoginService;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -31,6 +33,10 @@ public class WebGameController {
     private final Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(this.getClass());
     private final HashMap<String, Lobby> lobbyList = new HashMap<>();
     private final List<Principal> connectedUsers = new ArrayList<>();
+    private final HashMap<String, String> playerinfo = new HashMap<>();
+
+    @Autowired
+    LoginService loginservice;
 
     @Autowired
     Gson gson;
@@ -120,7 +126,7 @@ public class WebGameController {
 
     @MessageMapping("/create")
     @SendToUser("/lobby")
-    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName) {
+    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName, String playerId) {
 
         if (lobbyName.equals("missingHeader")) {
             logger.info("유저 {}가 로비명 없이 로비 생성하려함", principal.getName());
@@ -133,8 +139,9 @@ public class WebGameController {
         // 리스트에 이미 로비가 존재하지 않음
         if (!lobbyList.containsKey(lobbyName)) {
             logger.info("로비명 {}의 로비가 리스트에 없음", lobbyName);
-            Lobby newLobby = new Lobby(lobbyName, simpMessagingTemplate);
+            Lobby newLobby = new Lobby(lobbyName, simpMessagingTemplate, loginservice);
             newLobby.playerNames.add(name);
+            newLobby.playerinfo.put(name, playerId);
             lobbyList.put(lobbyName, newLobby);
 
             logger.info("로비 {} 생성. 현재 로비 리스트: {}", lobbyName, lobbyList);
@@ -144,7 +151,7 @@ public class WebGameController {
         Lobby lobby = lobbyList.get(lobbyName);
 
         try {
-            lobby.addPlayer(name);
+            lobby.addPlayer(name, playerId);
         } catch (IllegalStateException e) {
             logger.error("로비에 유저 추가시 에러 발생 : {}", e.getMessage());
             return "에러 발생함: " + e.getMessage();
@@ -181,7 +188,9 @@ public class WebGameController {
     @Scheduled(fixedDelay = 15000)
     void cleanUp() {
         logger.debug("로비 리스트 정리 시작");
-        for (String lobbyName : lobbyList.keySet()) {
+        Iterator<String> iterator = lobbyList.keySet().iterator();
+            while (iterator.hasNext()) {
+            String lobbyName = iterator.next();
 
             Lobby lobby = lobbyList.get(lobbyName);
             List<String> lobbyPlayers = lobby.getPlayerNames();
@@ -196,7 +205,7 @@ public class WebGameController {
 
             if (lobby.getState() == Lobby.State.ENDED) {
                 logger.info("로비 {} 삭제", lobbyName);
-                lobbyList.remove(lobbyName);
+                iterator.remove();
                 lobby = null;
             }
         }

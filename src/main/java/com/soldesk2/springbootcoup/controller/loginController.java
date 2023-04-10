@@ -24,4 +24,9 @@ public class loginController {
     public String signUp(@RequestBody Member user) {
         return loginService.signUp(user);
     }
+
+    public void WinCountup(String userId) {
+        System.out.println(userId);
+        loginService.wincountup(userId);
+    }
 }

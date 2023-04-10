@@ -43,4 +43,18 @@ public class LoginServiceimpl implements LoginService {
             return "-4"; // 이미 존재하는 아이디
         }
     }
+
+    @Override
+    public int wincountup(String id) {
+        System.out.println("메서드실행됨");
+        Optional<Member> finduser = loginRepository.findById(id);
+        Member updateuser = finduser.get();
+        updateuser.setWincount(updateuser.getWincount() + 1);
+        loginRepository.save(updateuser);
+
+        return updateuser.getWincount();
+    }
+
 }
+
+
