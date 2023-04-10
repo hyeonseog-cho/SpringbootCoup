@@ -126,7 +126,7 @@ public class WebGameController {
 
     @MessageMapping("/create")
     @SendToUser("/lobby")
-    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName, String playerId) {
+    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName,@Payload String playerId) {
 
         if (lobbyName.equals("missingHeader")) {
             logger.info("유저 {}가 로비명 없이 로비 생성하려함", principal.getName());
