@@ -62,7 +62,7 @@ public class BoardController {
 			board.setDate(checkboard.getDate());
 		}
 
-		Board updateBoard = boardService.update_Board(checkboard);
+		Board updateBoard = boardService.update_Board(board);
 
 
 		return ResponseEntity.ok(updateBoard);
