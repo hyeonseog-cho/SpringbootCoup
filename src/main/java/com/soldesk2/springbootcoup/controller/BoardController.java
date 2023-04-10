@@ -25,7 +25,7 @@ public class BoardController {
 	BoardService boardService;
 	
 	@GetMapping("/board")
-	public List<Board> Find_Boards_All() { // GET / 게시글 전체 검색
+	public List<Board> Find_Boards_All() { // GET / 게시글 전체 검색 푸시용
 		return boardService.get_List();
 	}
 	
