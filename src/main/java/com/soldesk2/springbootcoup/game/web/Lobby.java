@@ -37,7 +37,6 @@ public class Lobby {
     public List<String> playerNames;
 
     public HashMap<String, String> playerinfo;
-
     public LoginService loginService;
     
     public Lobby(String name, SimpMessagingTemplate simpMessagingTemplate, LoginService loginService) {
@@ -45,6 +44,7 @@ public class Lobby {
         this.name = name;
         this.destination = "/lobby";
         this.playerNames = new ArrayList<>();
+        this.playerinfo = new HashMap<>();
         this.state = State.OPEN;
         this.loginService = loginService;
         this.game = new WebGame(destination, simpMessagingTemplate, loginService);
@@ -62,7 +62,6 @@ public class Lobby {
 
         logger.info("로비 {}에 {}가 접속했다.", this.name, playerName);
 
-
         playerinfo.put(playerName, playerId);
         playerNames.add(playerName);
         updateAllPlayers("현재 접속한 로비 " + this.name + "에 " + playerName + "가 접속했다. \n" +
@@ -70,7 +69,7 @@ public class Lobby {
 
         if (this.playerNames.size() >= MAX_PLAYER) {
             this.state = State.FULL;
-        }
+        }        
     }
 
     public void updateAllPlayers(Object obj) {
@@ -131,6 +130,8 @@ public class Lobby {
     public int hashCode() {
         return Objects.hash(name);
     }   
+
+
 
     public enum State {
         EMPTY,

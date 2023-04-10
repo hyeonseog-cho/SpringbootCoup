@@ -126,8 +126,8 @@ public class WebGameController {
 
     @MessageMapping("/create")
     @SendToUser("/lobby")
-    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName,@Payload String playerId) {
-
+    public String createRoom(Principal principal, @Header(defaultValue = "missingHeader") String lobbyName, @Payload String playerId) {
+        
         if (lobbyName.equals("missingHeader")) {
             logger.info("유저 {}가 로비명 없이 로비 생성하려함", principal.getName());
             return "로비명을 입력해주세요.";
@@ -149,7 +149,7 @@ public class WebGameController {
         }
 
         Lobby lobby = lobbyList.get(lobbyName);
-
+        
         try {
             lobby.addPlayer(name, playerId);
         } catch (IllegalStateException e) {
@@ -189,9 +189,8 @@ public class WebGameController {
     void cleanUp() {
         logger.debug("로비 리스트 정리 시작");
         Iterator<String> iterator = lobbyList.keySet().iterator();
-            while (iterator.hasNext()) {
+        while (iterator.hasNext()) {
             String lobbyName = iterator.next();
-
             Lobby lobby = lobbyList.get(lobbyName);
             List<String> lobbyPlayers = lobby.getPlayerNames();
 
