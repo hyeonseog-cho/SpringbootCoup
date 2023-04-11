@@ -202,9 +202,9 @@ public class WebGame {
         options.removeIf(Objects::isNull);
         // 자기 자신은 대상이 될 수 없음
         options.remove(player);
-
-        if (getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.") != null) {
-            return getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.");
+        Player target = getChoice(player, options.toArray(new Player[0]), "대상을 선택하세요.");
+        if (target != null) {
+            return target;
         }
         return new Player("NullpotintException", null, null);   
     }
@@ -439,6 +439,9 @@ public class WebGame {
      */
     private void sacrificeCard(Player player) throws InterruptedException {
         Card card = getCardToSacrifice(player);
+        if (card == null) {
+            return;
+        }
         log("%s가 %s를 버림", player, card);
         player.setLostCard(card);
     }
@@ -451,7 +454,14 @@ public class WebGame {
      * @throws InterruptedException
      */
     private Card getCardToSacrifice(Player player) throws InterruptedException {
-        return getChoice(player, player.getCards().toArray(new Card[0]), "버릴 카드를 선택하세요");
+        Card card = getChoice(player, player.getCards().toArray(new Card[0]), "버릴 카드를 선택하세요");
+
+        if (card != null) {
+            return card;
+        } else {
+            return null;
+        }
+
     }
 
     /**
