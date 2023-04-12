@@ -1,5 +1,7 @@
 package com.soldesk2.springbootcoup.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +27,11 @@ public class loginController {
         return loginService.signUp(user);
     }
 
-    public void WinCountup(String userId) {
-        System.out.println(userId);
-        loginService.wincountup(userId);
+    @GetMapping("/rank")
+    public List<Member> rank() {
+        List<Member> members = loginService.rank();
+
+        return members;  
     }
+
 }

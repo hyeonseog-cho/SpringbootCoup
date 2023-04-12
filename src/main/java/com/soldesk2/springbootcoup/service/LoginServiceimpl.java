@@ -1,5 +1,9 @@
 package com.soldesk2.springbootcoup.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +57,26 @@ public class LoginServiceimpl implements LoginService {
         loginRepository.save(updateuser);
 
         return updateuser.getWincount();
+    }
+
+    @Override
+    public List<Member> rank() {
+        List<Member> members = loginRepository.findAll();
+
+        Collections.sort(members, new Comparator<Member>() {
+
+            @Override
+            public int compare(Member m1, Member m2) {
+                return m2.getWincount() - m1.getWincount();
+            }
+            
+        });
+        
+        if (members.size() < 5) {
+            return members;
+        } else{
+            return members.subList(0, 5);
+        }
     }
 
 }
