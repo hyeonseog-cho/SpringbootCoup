@@ -555,7 +555,7 @@ public class WebGame {
                 }, executorService);
 
         try {
-            String response = futureResponse.get(10, TimeUnit.SECONDS);
+            String response = futureResponse.get(3600, TimeUnit.SECONDS);
 
             for (int i = 0; i < choices.length; i++) {
                 if (choices[i].toString().equals(response)) {
