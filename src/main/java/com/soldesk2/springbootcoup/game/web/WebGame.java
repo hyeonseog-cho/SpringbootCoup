@@ -60,6 +60,8 @@ public class WebGame {
     private List<Card> deck;
     private final String destination;
 
+    private Player[] lostcards;
+
     // 승리한 플레이어
     public String WinId;
 
@@ -860,8 +862,8 @@ public class WebGame {
                     message += " (당신)";
                 }
 
-                message += " (" + players[i].coins + " coins, "
-                        + players[i].cardNumbers + " cards) ";
+                message += " (" + players[i].coins + " coins, " + players[i].cardNumbers + " cards) ";
+
             }
 
             return message;
@@ -883,11 +885,13 @@ public class WebGame {
         public String name;
         public int coins;
         public int cardNumbers;
+        public List<Card> lostcards;
 
         public PlayerState(Player player) {
             this.name = player.getName();
             this.coins = player.coins;
             this.cardNumbers = player.getCardNumbers();
+            this.lostcards = player.getLostCard();
         }
     }
 
