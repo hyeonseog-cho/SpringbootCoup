@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
         Board board2 = new Board();
         board2.setTitle("[공지] 레지스탕스 쿠 룰");
-        board2.setContent("룰은 룰북을 참고해주세요. <br> <a href='https://sneaky-blizzard-f32.notion.site/3d35524e31fb4caeacbfadfc0cffe93e'>룰북</a>");
+        board2.setContent("룰은 룰북을 참고해주세요. 룰북 링크: https://sneaky-blizzard-f32.notion.site/3d35524e31fb4caeacbfadfc0cffe93e ");
         board2.setWriter("GM");
         boardRepository.save(board2);
     }
